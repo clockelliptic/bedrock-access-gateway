@@ -1,13 +1,17 @@
 // app/api/chat/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { ChatRequestSchema, ChatResponseSchema } from './contract';
-import { BedrockModel } from '../../../utils/bedrock-model';
-import { logger } from '../../../utils/logger';
+import { logger } from '@/lib/utils/logger';
+import { BedrockModel } from '@/lib/bedrock-model';
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const chatRequest = ChatRequestSchema.parse(body);
+
+        // TODO: add streaming support
+        // const encoder = new TextEncoder();
+        // const decoder = new TextDecoder();
 
         // Use BedrockModel to handle chat request
         const bedrockModel = new BedrockModel();

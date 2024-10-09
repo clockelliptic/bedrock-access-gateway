@@ -1,19 +1,21 @@
 // lib/bedrock-model.ts
-import { BedrockClient, ConverseCommand, InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
-import { ChatRequest, ChatResponse } from '/app/api/chat/contract';
-import { EmbeddingsRequest, EmbeddingsResponse } from '/app/api/embeddings/contract';
-import { logger } from '/utils/logger';
+import { BedrockRuntimeClient, ConverseCommand, InvokeModelCommand, Message } from '@aws-sdk/client-bedrock-runtime';
+import { ChatRequest, ChatResponse } from '@/app/api/chat/contract';
+import { EmbeddingsRequest, EmbeddingsResponse } from '@/app/api/embeddings/contract';
+import { logger } from '@/lib/utils/logger';
+import { transformOpenAIMessage } from './contract';
+import { randomUUID } from 'crypto';
 
 const AWS_REGION = process.env.AWS_REGION || 'us-west-2';
 const DEBUG = process.env.DEBUG === 'true';
 
 // Initialize Bedrock Client
-const bedrockClient = new BedrockClient({ region: AWS_REGION });
+const bedrockClient = new BedrockRuntimeClient({ region: AWS_REGION });
 
 export class BedrockModel {
     private supportedModels: Record<string, any> = {
         // Add supported model configurations here, similar to the original file
-        "anthropic.claude-3-sonnet-20240229-v1:0": { system: true, multimodal: true, tool_call: true },
+        "us.meta.llama3-2-90b-instruct-v1:0": { system: true, multimodal: true, tool_call: true },
         // Additional models...
     };
 
@@ -31,22 +33,22 @@ export class BedrockModel {
         try {
             const command = new ConverseCommand({
                 modelId: chatRequest.model,
-                messages: chatRequest.messages,
-                stream: chatRequest.stream,
+                messages: chatRequest.messages.map(transformOpenAIMessage),
+                // stream: chatRequest.stream, // always true?
             });
 
             const response = await bedrockClient.send(command);
             if (DEBUG) logger('Bedrock Response: ', response);
             
             return {
-                id: response.messageId,
+                id: response.$metadata.requestId ?? `randomUUID-${randomUUID()}`,
                 model: chatRequest.model,
                 choices: [
                     {
                         index: 0,
                         message: {
                             role: 'assistant',
-                            content: response.output?.message.content || '',
+                            content: response.output?.message?.content?.[0].text || '',
                         },
                         finish_reason: response.stopReason || '',
                     }

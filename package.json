@@ -1,0 +1,45 @@
+{
+  "name": "bedrock-access-gateway-next-ts-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "migrate": "prisma migrate dev",
+    "seed": "prisma db seed",
+    "reset": "prisma migrate reset"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.668.0",
+    "@prisma/client": "^4.16.1",
+    "@types/node": "20.3.2",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "autoprefixer": "10.4.14",
+    "deep-chat": "^2.0.1",
+    "eslint": "8.43.0",
+    "jotai": "^2.9.1",
+    "next": "^14.1.1",
+    "postcss": "8.4.31",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.1",
+    "swr": "^2.2.5",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.1.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "eslint-config-next": "^14.1.1",
+    "prisma": "^4.16.1",
+    "ts-node": "^10.9.1"
+  }
+}

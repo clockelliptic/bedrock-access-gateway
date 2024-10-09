@@ -1,8 +1,8 @@
 // app/api/embeddings/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { EmbeddingsRequestSchema, EmbeddingsResponseSchema } from './contract';
-import { BedrockEmbeddingsModel } from '../../../utils/bedrock-model';
-import { logger } from '../../../utils/logger';
+import { logger } from '@/lib/utils/logger';
+import { BedrockEmbeddingsModel } from '@/lib/bedrock-model';
 
 export async function POST(request: NextRequest) {
     try {

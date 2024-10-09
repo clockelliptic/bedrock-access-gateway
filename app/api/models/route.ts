@@ -1,8 +1,8 @@
 // app/api/models/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { ModelListSchema } from './contract';
-import { BedrockModel } from '../../../utils/bedrock-model';
-import { logger } from '../../../utils/logger';
+import { BedrockModel } from '@/lib/bedrock-model';
+import { logger } from '@/lib/utils/logger';
 
 export async function GET(request: NextRequest) {
     try {
